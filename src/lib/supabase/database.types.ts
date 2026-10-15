@@ -1130,8 +1130,34 @@ export type Database = {
         }
         Returns: Json
       }
+      customer_statement: {
+        Args: { p_customer_id: string }
+        Returns: {
+          balance: number
+          credit: number
+          debit: number
+          description: string
+          happened_at: string
+          kind: string
+          reference: string | null
+        }[]
+      }
       current_staff_role: { Args: never; Returns: string }
       is_owner: { Args: never; Returns: boolean }
+      debtors: {
+        Args: never
+        Returns: {
+          balance: number
+          credit_limit: number
+          days_owed: number | null
+          id: string
+          last_payment_at: string | null
+          name: string
+          oldest_unpaid_at: string | null
+          phone: string | null
+          type: string
+        }[]
+      }
       import_products: { Args: { p_rows: Json }; Returns: Json }
       is_staff: { Args: never; Returns: boolean }
       list_staff: {
@@ -1147,6 +1173,16 @@ export type Database = {
           phone: string
           role: string
         }[]
+      }
+      record_credit_payment: {
+        Args: {
+          p_amount: number
+          p_customer_id: string
+          p_method: string
+          p_momo_txn_id?: string
+          p_note?: string
+        }
+        Returns: Json
       }
       sale_receipt: { Args: { p_sale_id: string }; Returns: Json }
       save_product: { Args: { p: Json }; Returns: string }

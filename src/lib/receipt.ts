@@ -89,3 +89,16 @@ export function receiptText(receipt: Receipt, shop: ShopInfo) {
   lines.push(shop.receipt_footer || "Thank you for shopping with us!");
   return lines.join("\n");
 }
+
+/** Friendly WhatsApp reminder to a customer who owes money. */
+export function reminderText(name: string, balance: number | string, shop: Pick<ShopInfo, "shop_name" | "momo_number"> & { momo_name?: string | null }) {
+  const lines = [
+    `Hello ${name.split(" ")[0]}, this is ${shop.shop_name}.`,
+    `Your balance with us is ${formatMoney(balance)}.`,
+  ];
+  if (shop.momo_number) {
+    lines.push(`You can pay by MoMo to ${shop.momo_number}${shop.momo_name ? ` (${shop.momo_name})` : ""}.`);
+  }
+  lines.push("Thank you!");
+  return lines.join("\n");
+}

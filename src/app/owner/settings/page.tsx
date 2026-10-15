@@ -26,7 +26,7 @@ const items: Item[] = [
   { label: "Change my password", description: "Set a new password for your account", icon: KeyRound, href: "/reset-password" },
   { label: "Shop details", description: "Name, phone and MoMo number on receipts", icon: Store, phase: 11 },
   { label: "Categories", description: "Product groups like Water and Provisions", icon: Tags, href: "/owner/settings/categories" },
-  { label: "Customers", description: "Credit customers and limits", icon: UsersRound, phase: 5 },
+  { label: "Customers", description: "Credit customers and limits", icon: UsersRound, href: "/owner/money/customers" },
   { label: "Suppliers", description: "Who delivers your goods", icon: Truck, phase: 6 },
 ];
 
