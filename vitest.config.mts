@@ -6,6 +6,8 @@ export default defineConfig({
     alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) },
   },
   test: {
-    include: ["src/**/*.test.ts"],
+    include: ["src/**/*.test.ts", "tests/**/*.test.ts"],
+    // Database tests start an in-memory Postgres, which takes a few seconds.
+    testTimeout: 30_000,
   },
 });
