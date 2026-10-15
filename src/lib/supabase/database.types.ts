@@ -799,6 +799,11 @@ export type Database = {
           attendant_id: string
           client_ref: string | null
           note: string | null
+          money_returned: number
+          credit_reversed: number
+          reverse_reason: string | null
+          reversed_at: string | null
+          reversed_by: string | null
           change_given: number
           created_at: string
           credit_amount: number
@@ -819,6 +824,11 @@ export type Database = {
           attendant_id?: string
           client_ref?: string | null
           note?: string | null
+          money_returned?: number
+          credit_reversed?: number
+          reverse_reason?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
           change_given?: number
           created_at?: string
           credit_amount?: number
@@ -839,6 +849,11 @@ export type Database = {
           attendant_id?: string
           client_ref?: string | null
           note?: string | null
+          money_returned?: number
+          credit_reversed?: number
+          reverse_reason?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
           change_given?: number
           created_at?: string
           credit_amount?: number
@@ -1118,6 +1133,10 @@ export type Database = {
     }
     Functions: {
       accra_today: { Args: never; Returns: string }
+      adjust_stock: {
+        Args: { p_change: number; p_note: string; p_product_id: string; p_reason: string }
+        Returns: undefined
+      }
       complete_sale: {
         Args: {
           p_client_ref?: string
@@ -1162,6 +1181,10 @@ export type Database = {
           type: string
         }[]
       }
+      decide_approval: {
+        Args: { p_approve: boolean; p_reason?: string; p_request_id: string }
+        Returns: Json
+      }
       delivery_details: { Args: { p_delivery_id: string }; Returns: Json }
       import_products: { Args: { p_rows: Json }; Returns: Json }
       is_staff: { Args: never; Returns: boolean }
@@ -1199,8 +1222,11 @@ export type Database = {
         }
         Returns: Json
       }
+      refund_sale: { Args: { p_reason: string; p_sale_id: string }; Returns: Json }
+      request_approval: { Args: { p_payload: Json; p_type: string }; Returns: string }
       sale_receipt: { Args: { p_sale_id: string }; Returns: Json }
       save_product: { Args: { p: Json }; Returns: string }
+      void_sale: { Args: { p_reason: string; p_sale_id: string }; Returns: Json }
       update_staff_access: {
         Args: { p_is_active: boolean; p_role: string; p_user_id: string }
         Returns: undefined
