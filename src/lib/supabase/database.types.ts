@@ -1114,6 +1114,7 @@ export type Database = {
       accra_today: { Args: never; Returns: string }
       current_staff_role: { Args: never; Returns: string }
       is_owner: { Args: never; Returns: boolean }
+      import_products: { Args: { p_rows: Json }; Returns: Json }
       is_staff: { Args: never; Returns: boolean }
       list_staff: {
         Args: never
@@ -1129,6 +1130,7 @@ export type Database = {
           role: string
         }[]
       }
+      save_product: { Args: { p: Json }; Returns: string }
       update_staff_access: {
         Args: { p_is_active: boolean; p_role: string; p_user_id: string }
         Returns: undefined

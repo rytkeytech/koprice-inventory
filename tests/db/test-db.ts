@@ -61,3 +61,46 @@ export async function createUser(
   }
   return id;
 }
+
+/** A fresh database with an owner and two attendants, ready for tests. */
+export async function createShop() {
+  const db = await createTestDb();
+  const owner = await createUser(db, "Prince Owner", "owner");
+  const attendant = await createUser(db, "Ama Attendant", "attendant");
+  const attendant2 = await createUser(db, "Kofi Attendant", "attendant");
+  return { db, owner, attendant, attendant2 };
+}
+
+/** Runs a query and returns its rows. */
+export async function rowsOf<T = Record<string, unknown>>(
+  db: PGlite,
+  sql: string,
+  params: unknown[] = [],
+) {
+  return (await db.query<T>(sql, params)).rows;
+}
+
+/** Calls a database function that returns one value (e.g. jsonb or uuid). */
+export async function call<T = unknown>(db: PGlite, sql: string, params: unknown[] = []) {
+  const { rows } = await db.query<{ result: T }>(`select ${sql} as result`, params);
+  return rows[0].result;
+}
+
+/** Owner creates a product (and optional packs/cost/opening stock). Returns its id. */
+export async function makeProduct(db: PGlite, owner: string, product: Record<string, unknown>) {
+  await asUser(db, owner);
+  return call<string>(db, "public.save_product($1)", [
+    { retail_price: 1, wholesale_price: 1, ...product },
+  ]);
+}
+
+/** Current stock of a product, read as admin. */
+export async function stockOf(db: PGlite, productId: string) {
+  await asAdmin(db);
+  const [row] = await rowsOf<{ stock_units: number }>(
+    db,
+    "select stock_units from public.products where id = $1",
+    [productId],
+  );
+  return row.stock_units;
+}

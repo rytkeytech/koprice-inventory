@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { Logo } from "@/components/Logo";
 import { requireRole } from "@/lib/auth";
-import { AppNav } from "./AppNav";
+import { AppNav, NavList } from "./AppNav";
 import { HeaderUser } from "./HeaderUser";
 
 type AppShellProps = {
@@ -29,7 +29,9 @@ export function AppShell({ variant, children }: AppShellProps) {
         </Suspense>
       </main>
 
-      <AppNav variant={variant} />
+      <Suspense fallback={<NavList variant={variant} pathname={null} />}>
+        <AppNav variant={variant} />
+      </Suspense>
     </div>
   );
 }
