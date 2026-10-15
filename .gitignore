@@ -147,3 +147,31 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+
+# --- Koprice project ---
+# Secrets: never commit (also covered by .env.* above)
+.env.local
+.env*.local
+# Next.js
+/.next/
+next-env.d.ts
+*.pem
+.vercel
+# Netlify local folder
+.netlify
+# Supabase local CLI state
+supabase/.temp
+supabase/.branches
+
+# --- Koprice project additions ---
+# Secrets: never commit (keys live in .env.local and Netlify env settings)
+.env.local
+.env*.local
+
+# Next.js
+next-env.d.ts
+.netlify
+
+# Supabase CLI local files
+supabase/.temp
+supabase/.branches

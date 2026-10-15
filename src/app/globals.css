@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+/* Koprice design tokens (BUILD_SPEC §8).
+   Use them as Tailwind classes, e.g. bg-brand, text-muted, border-line, rounded-card. */
+@theme {
+  --font-sans: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+
+  --color-brand: #166534;
+  --color-brand-dark: #14532d;
+  --color-accent: #f59e0b;
+  --color-ink: #12261a;
+  --color-muted: #4a6352;
+  --color-bg: #f4f6f2;
+  --color-card: #ffffff;
+  --color-line: #e3e8e1;
+  --color-input: #d3dbd1;
+  --color-danger: #b91c1c;
+  --color-warning: #9a5b00;
+  --color-warning-bg: #fdf1dc;
+  --color-info: #1e4f8a;
+  --color-info-bg: #e3edf8;
+  --color-success-bg: #e8f3ec;
+
+  --radius-card: 18px;
+  --radius-control: 14px;
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
