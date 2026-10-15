@@ -797,6 +797,8 @@ export type Database = {
         Row: {
           approval_request_id: string | null
           attendant_id: string
+          client_ref: string | null
+          note: string | null
           change_given: number
           created_at: string
           credit_amount: number
@@ -815,6 +817,8 @@ export type Database = {
         Insert: {
           approval_request_id?: string | null
           attendant_id?: string
+          client_ref?: string | null
+          note?: string | null
           change_given?: number
           created_at?: string
           credit_amount?: number
@@ -833,6 +837,8 @@ export type Database = {
         Update: {
           approval_request_id?: string | null
           attendant_id?: string
+          client_ref?: string | null
+          note?: string | null
           change_given?: number
           created_at?: string
           credit_amount?: number
@@ -1112,6 +1118,18 @@ export type Database = {
     }
     Functions: {
       accra_today: { Args: never; Returns: string }
+      complete_sale: {
+        Args: {
+          p_client_ref?: string
+          p_customer_id?: string
+          p_discount?: number
+          p_items: Json
+          p_note?: string
+          p_payment?: Json
+          p_price_mode: string
+        }
+        Returns: Json
+      }
       current_staff_role: { Args: never; Returns: string }
       is_owner: { Args: never; Returns: boolean }
       import_products: { Args: { p_rows: Json }; Returns: Json }
@@ -1130,6 +1148,7 @@ export type Database = {
           role: string
         }[]
       }
+      sale_receipt: { Args: { p_sale_id: string }; Returns: Json }
       save_product: { Args: { p: Json }; Returns: string }
       update_staff_access: {
         Args: { p_is_active: boolean; p_role: string; p_user_id: string }
