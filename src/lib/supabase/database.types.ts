@@ -1142,6 +1142,10 @@ export type Database = {
           reference: string | null
         }[]
       }
+      confirm_delivery: {
+        Args: { p_costs: Json; p_delivery_id: string; p_note?: string; p_status: string }
+        Returns: undefined
+      }
       current_staff_role: { Args: never; Returns: string }
       is_owner: { Args: never; Returns: boolean }
       debtors: {
@@ -1158,6 +1162,7 @@ export type Database = {
           type: string
         }[]
       }
+      delivery_details: { Args: { p_delivery_id: string }; Returns: Json }
       import_products: { Args: { p_rows: Json }; Returns: Json }
       is_staff: { Args: never; Returns: boolean }
       list_staff: {
@@ -1181,6 +1186,16 @@ export type Database = {
           p_method: string
           p_momo_txn_id?: string
           p_note?: string
+        }
+        Returns: Json
+      }
+      record_delivery: {
+        Args: {
+          p_client_ref?: string
+          p_items: Json
+          p_note?: string
+          p_photo_path?: string
+          p_supplier_id?: string
         }
         Returns: Json
       }

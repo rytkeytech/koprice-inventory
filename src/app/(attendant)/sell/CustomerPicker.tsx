@@ -5,7 +5,7 @@ import { useState, useTransition } from "react";
 import { FormAlert } from "@/components/ui/form";
 import { formatMoney } from "@/lib/money";
 import { addCustomer } from "./actions";
-import type { SellCustomer } from "./sell-types";
+import type { SellCustomer } from "@/lib/sell-options";
 
 type Props = {
   customers: SellCustomer[];

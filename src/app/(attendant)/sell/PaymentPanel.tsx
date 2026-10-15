@@ -8,7 +8,7 @@ import { fromPesewas, settle, toPesewas, type PriceMode } from "@/lib/pricing";
 import type { Receipt } from "@/lib/receipt";
 import { completeSale } from "./actions";
 import { CustomerPicker } from "./CustomerPicker";
-import { priceOf, type CartLine, type SellCustomer, type SellOptionView } from "./sell-types";
+import { priceOf, type CartLine, type SellCustomer, type SellOptionView } from "@/lib/sell-options";
 
 type Method = "cash" | "momo" | "credit" | "split";
 

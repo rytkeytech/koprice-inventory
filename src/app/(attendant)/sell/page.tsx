@@ -3,7 +3,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { getCategories, getProducts, getShopSettings } from "@/lib/catalogue";
 import { createClient } from "@/lib/supabase/server";
 import { SellScreen } from "./SellScreen";
-import type { SellCustomer } from "./sell-types";
+import type { SellCustomer } from "@/lib/sell-options";
 
 export const metadata: Metadata = { title: "Sell" };
 

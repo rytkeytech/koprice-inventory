@@ -27,7 +27,7 @@ const items: Item[] = [
   { label: "Shop details", description: "Name, phone and MoMo number on receipts", icon: Store, phase: 11 },
   { label: "Categories", description: "Product groups like Water and Provisions", icon: Tags, href: "/owner/settings/categories" },
   { label: "Customers", description: "Credit customers and limits", icon: UsersRound, href: "/owner/money/customers" },
-  { label: "Suppliers", description: "Who delivers your goods", icon: Truck, phase: 6 },
+  { label: "Suppliers", description: "Who delivers your goods", icon: Truck, href: "/owner/settings/suppliers" },
 ];
 
 export default function SettingsPage() {

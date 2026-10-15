@@ -10,7 +10,7 @@ import type { Receipt, ShopInfo } from "@/lib/receipt";
 import { formatStock } from "@/lib/stock";
 import { PaymentPanel } from "./PaymentPanel";
 import { ReceiptView } from "./ReceiptView";
-import { optionsFor, priceOf, type CartLine, type SellCustomer, type SellOptionView } from "./sell-types";
+import { optionsFor, priceOf, type CartLine, type SellCustomer, type SellOptionView } from "@/lib/sell-options";
 
 type Props = {
   products: Product[];
