@@ -12,7 +12,8 @@ create schema storage;
 create table auth.users (
   id                 uuid primary key default gen_random_uuid(),
   email              text,
-  raw_user_meta_data jsonb not null default '{}'::jsonb
+  raw_user_meta_data jsonb not null default '{}'::jsonb,
+  last_sign_in_at    timestamptz
 );
 
 -- Supabase's auth.uid() reads the user id from the request's JWT claims.

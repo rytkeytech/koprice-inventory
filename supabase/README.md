@@ -12,9 +12,9 @@ project; they only create things (no DROP / DELETE / TRUNCATE).
 | `…000300_customers_and_sales.sql` | customers, credit payments, approval requests, sales |
 | `…000400_deliveries_cashups_counts_expenses.sql` | suppliers, deliveries, cash-ups, stock counts, expenses |
 | `…000500_storage_and_starting_data.sql` | storage buckets + policies, shop settings row, starting categories |
+| `20261016000100_staff_admin.sql` | Phase 2: `list_staff()` and `update_staff_access()` (owner only) |
 
-**Apply with the SQL Editor:** Supabase dashboard → your project → **SQL Editor**
-→ **New query** → paste one file → **Run**. Do the files in order.
+**Apply:** run `npx supabase db push` in the VS Code terminal and answer **Y**.
 
 ## Tests
 

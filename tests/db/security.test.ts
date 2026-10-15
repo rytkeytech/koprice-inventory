@@ -469,3 +469,76 @@ describe("other rules", () => {
     await db.query("insert into storage.objects (bucket_id, name) values ('product-photos', 'x.jpg')");
   });
 });
+
+describe("staff administration (phase 2)", () => {
+  it("only the owner can list staff, with emails", async () => {
+    await asUser(db, attendant);
+    await expect(rows("select * from public.list_staff()")).rejects.toThrow(/Only the owner/);
+    await asUser(db, owner);
+    const staff = await rows<{ email: string; role: string | null }>(
+      "select email, role from public.list_staff()",
+    );
+    expect(staff).toHaveLength(4);
+    expect(staff.find((s) => s.role === null)?.email).toBe("new.signup@example.test");
+  });
+
+  it("owner approves a pending sign-up as attendant", async () => {
+    await asUser(db, owner);
+    await db.query("select public.update_staff_access($1, 'attendant', true)", [pending]);
+    await asAdmin(db);
+    const [p] = await rows<{ role: string; approved_by: string; approved_at: string | null }>(
+      "select role, approved_by, approved_at from public.profiles where id = $1",
+      [pending],
+    );
+    expect(p.role).toBe("attendant");
+    expect(p.approved_by).toBe(owner);
+    expect(p.approved_at).not.toBeNull();
+  });
+
+  it("the approved user can now see products", async () => {
+    await asUser(db, pending);
+    expect((await rows("select * from public.products")).length).toBe(1);
+  });
+
+  it("owner can turn access off and on again", async () => {
+    await asUser(db, owner);
+    await db.query("select public.update_staff_access($1, 'attendant', false)", [pending]);
+    await asUser(db, pending);
+    expect(await rows("select * from public.products")).toEqual([]);
+    await asUser(db, owner);
+    await db.query("select public.update_staff_access($1, 'attendant', true)", [pending]);
+  });
+
+  it("owner cannot remove their own owner access", async () => {
+    await asUser(db, owner);
+    await expect(
+      db.query("select public.update_staff_access($1, 'attendant', true)", [owner]),
+    ).rejects.toThrow(/cannot remove your own owner access/);
+    await expect(
+      db.query("select public.update_staff_access($1, 'owner', false)", [owner]),
+    ).rejects.toThrow(/cannot remove your own owner access/);
+  });
+
+  it("attendants cannot change anyone's access", async () => {
+    await asUser(db, attendant);
+    await expect(
+      db.query("select public.update_staff_access($1, 'owner', true)", [attendant]),
+    ).rejects.toThrow(/Only the owner/);
+  });
+
+  it("anon cannot call the staff functions", async () => {
+    await asAnon(db);
+    await expect(rows("select * from public.list_staff()")).rejects.toThrow(/permission denied/);
+  });
+
+  it("role changes are recorded in the audit log", async () => {
+    await asUser(db, owner);
+    const logs = await rows<{ details: { role?: { old: unknown; new: unknown } } }>(
+      "select details from public.audit_logs where entity = 'profiles' and entity_id = $1 and action = 'update' and user_id = $2",
+      [pending, owner],
+    );
+    expect(logs.some((l) => l.details.role?.old === null && l.details.role?.new === "attendant")).toBe(
+      true,
+    );
+  });
+});
