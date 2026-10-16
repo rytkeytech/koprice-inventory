@@ -3,6 +3,7 @@ import Link from "next/link";
 import {
   ChevronRight,
   KeyRound,
+  ScrollText,
   Store,
   Tags,
   Truck,
@@ -24,10 +25,11 @@ type Item = {
 const items: Item[] = [
   { label: "Staff", description: "Approve sign-ups, set roles, turn access off", icon: Users, href: "/owner/settings/staff" },
   { label: "Change my password", description: "Set a new password for your account", icon: KeyRound, href: "/reset-password" },
-  { label: "Shop details", description: "Name, phone and MoMo number on receipts", icon: Store, phase: 11 },
+  { label: "Shop details", description: "Name, phone and MoMo number on receipts", icon: Store, href: "/owner/settings/shop" },
   { label: "Categories", description: "Product groups like Water and Provisions", icon: Tags, href: "/owner/settings/categories" },
   { label: "Customers", description: "Credit customers and limits", icon: UsersRound, href: "/owner/money/customers" },
   { label: "Suppliers", description: "Who delivers your goods", icon: Truck, href: "/owner/settings/suppliers" },
+  { label: "Audit log", description: "Every sensitive change: who and when", icon: ScrollText, href: "/owner/settings/audit" },
 ];
 
 export default function SettingsPage() {

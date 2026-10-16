@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ChevronRight, ClipboardList, HandCoins, MessageSquareWarning } from "lucide-react";
+import { ChevronRight, ClipboardList, HandCoins, MessageSquareWarning, Receipt } from "lucide-react";
 import { SALE_STATUS } from "@/components/SaleSummary";
 import { formatDate, formatDateTime } from "@/lib/dates";
 import { formatMoney } from "@/lib/money";
@@ -106,6 +106,9 @@ export default async function MyDayPage() {
         </Link>
         <Link href="/requests" className="flex min-h-14 items-center gap-3 rounded-card border border-line bg-card px-4 font-semibold">
           <MessageSquareWarning aria-hidden="true" className="size-5 text-brand" /> Ask the owner
+        </Link>
+        <Link href="/expense" className="flex min-h-14 items-center gap-3 rounded-card border border-line bg-card px-4 font-semibold">
+          <Receipt aria-hidden="true" className="size-5 text-brand" /> Money spent for the shop
         </Link>
       </div>
 
