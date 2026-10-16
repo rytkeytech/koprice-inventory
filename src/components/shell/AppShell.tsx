@@ -16,7 +16,7 @@ export function AppShell({ variant, children }: AppShellProps) {
     <div className="flex min-h-dvh flex-col md:pl-24">
       <header className="sticky top-0 z-30 border-b border-line bg-card/95 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4">
-          <Logo size={36} wordmarkClassName="hidden sm:flex" />
+          <Logo size={34} className="shrink-0" />
           <Suspense fallback={<div className="h-10 w-28" />}>
             <HeaderUser variant={variant} />
           </Suspense>
