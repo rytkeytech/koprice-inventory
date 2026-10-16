@@ -1137,6 +1137,7 @@ export type Database = {
         Args: { p_change: number; p_note: string; p_product_id: string; p_reason: string }
         Returns: undefined
       }
+      attendant_day: { Args: { p_attendant: string; p_date: string }; Returns: Json }
       complete_sale: {
         Args: {
           p_client_ref?: string
@@ -1160,6 +1161,10 @@ export type Database = {
           kind: string
           reference: string | null
         }[]
+      }
+      confirm_cash_up: {
+        Args: { p_cash_up_id: string; p_confirmed_amount: number; p_note?: string }
+        Returns: Json
       }
       confirm_delivery: {
         Args: { p_costs: Json; p_delivery_id: string; p_note?: string; p_status: string }
@@ -1202,6 +1207,7 @@ export type Database = {
           role: string
         }[]
       }
+      my_day: { Args: { p_date?: string }; Returns: Json }
       record_credit_payment: {
         Args: {
           p_amount: number
@@ -1227,6 +1233,16 @@ export type Database = {
       sale_receipt: { Args: { p_sale_id: string }; Returns: Json }
       save_product: { Args: { p: Json }; Returns: string }
       void_sale: { Args: { p_reason: string; p_sale_id: string }; Returns: Json }
+      submit_cash_up: {
+        Args: {
+          p_amount: number
+          p_business_date: string
+          p_method: string
+          p_momo_txn_id?: string
+          p_note?: string
+        }
+        Returns: Json
+      }
       update_staff_access: {
         Args: { p_is_active: boolean; p_role: string; p_user_id: string }
         Returns: undefined
