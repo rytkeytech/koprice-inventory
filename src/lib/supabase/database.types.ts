@@ -1211,6 +1211,7 @@ export type Database = {
       }
       missing_stock_report: { Args: { p_from: string; p_to: string }; Returns: Json }
       my_day: { Args: { p_date?: string }; Returns: Json }
+      owner_dashboard: { Args: { p_from: string; p_to: string }; Returns: Json }
       record_credit_payment: {
         Args: {
           p_amount: number
@@ -1234,6 +1235,7 @@ export type Database = {
       refund_sale: { Args: { p_reason: string; p_sale_id: string }; Returns: Json }
       request_approval: { Args: { p_payload: Json; p_type: string }; Returns: string }
       sale_receipt: { Args: { p_sale_id: string }; Returns: Json }
+      sales_report: { Args: { p_from: string; p_to: string }; Returns: Json }
       save_product: { Args: { p: Json }; Returns: string }
       void_sale: { Args: { p_reason: string; p_sale_id: string }; Returns: Json }
       start_stock_count: {
