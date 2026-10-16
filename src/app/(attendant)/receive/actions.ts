@@ -17,7 +17,8 @@ export async function recordDelivery(
   if (input.items.length === 0) return { ok: false, error: "Add at least one item." };
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("record_delivery", {
-    p_supplier_id: input.supplierId ?? undefined,
+    // Must always be sent (the function has no default for it); null = no supplier.
+    p_supplier_id: input.supplierId as string,
     p_items: input.items,
     p_photo_path: input.photoPath ?? undefined,
     p_note: input.note || undefined,

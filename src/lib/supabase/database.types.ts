@@ -282,6 +282,7 @@ export type Database = {
         Row: {
           checked_at: string | null
           checked_by: string | null
+          client_ref: string | null
           created_at: string
           id: string
           invoice_photo_url: string | null
@@ -293,6 +294,7 @@ export type Database = {
         Insert: {
           checked_at?: string | null
           checked_by?: string | null
+          client_ref?: string | null
           created_at?: string
           id?: string
           invoice_photo_url?: string | null
@@ -304,6 +306,7 @@ export type Database = {
         Update: {
           checked_at?: string | null
           checked_by?: string | null
+          client_ref?: string | null
           created_at?: string
           id?: string
           invoice_photo_url?: string | null
@@ -797,24 +800,24 @@ export type Database = {
         Row: {
           approval_request_id: string | null
           attendant_id: string
-          client_ref: string | null
-          note: string | null
-          money_returned: number
-          credit_reversed: number
-          reverse_reason: string | null
-          reversed_at: string | null
-          reversed_by: string | null
           change_given: number
+          client_ref: string | null
           created_at: string
           credit_amount: number
+          credit_reversed: number
           customer_id: string | null
           discount: number
           id: string
           momo_txn_id: string | null
+          money_returned: number
+          note: string | null
           paid_cash: number
           paid_momo: number
           price_mode: string
           receipt_no: string
+          reverse_reason: string | null
+          reversed_at: string | null
+          reversed_by: string | null
           status: string
           subtotal: number
           total: number
@@ -822,24 +825,24 @@ export type Database = {
         Insert: {
           approval_request_id?: string | null
           attendant_id?: string
-          client_ref?: string | null
-          note?: string | null
-          money_returned?: number
-          credit_reversed?: number
-          reverse_reason?: string | null
-          reversed_at?: string | null
-          reversed_by?: string | null
           change_given?: number
+          client_ref?: string | null
           created_at?: string
           credit_amount?: number
+          credit_reversed?: number
           customer_id?: string | null
           discount?: number
           id?: string
           momo_txn_id?: string | null
+          money_returned?: number
+          note?: string | null
           paid_cash?: number
           paid_momo?: number
           price_mode: string
           receipt_no?: string
+          reverse_reason?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
           status?: string
           subtotal: number
           total: number
@@ -847,24 +850,24 @@ export type Database = {
         Update: {
           approval_request_id?: string | null
           attendant_id?: string
-          client_ref?: string | null
-          note?: string | null
-          money_returned?: number
-          credit_reversed?: number
-          reverse_reason?: string | null
-          reversed_at?: string | null
-          reversed_by?: string | null
           change_given?: number
+          client_ref?: string | null
           created_at?: string
           credit_amount?: number
+          credit_reversed?: number
           customer_id?: string | null
           discount?: number
           id?: string
           momo_txn_id?: string | null
+          money_returned?: number
+          note?: string | null
           paid_cash?: number
           paid_momo?: number
           price_mode?: string
           receipt_no?: string
+          reverse_reason?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
           status?: string
           subtotal?: number
           total?: number
@@ -889,6 +892,13 @@ export type Database = {
             columns: ["customer_id"]
             isOneToOne: false
             referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sales_reversed_by_fkey"
+            columns: ["reversed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -1134,11 +1144,28 @@ export type Database = {
     Functions: {
       accra_today: { Args: never; Returns: string }
       adjust_stock: {
-        Args: { p_change: number; p_note: string; p_product_id: string; p_reason: string }
+        Args: {
+          p_change: number
+          p_note: string
+          p_product_id: string
+          p_reason: string
+        }
         Returns: undefined
       }
-      attendant_day: { Args: { p_attendant: string; p_date: string }; Returns: Json }
-      complete_stock_count: { Args: { p_apply: boolean; p_count_id: string }; Returns: Json }
+      apply_sale_effects: { Args: { p_sale_id: string }; Returns: undefined }
+      apply_stock_adjustment: {
+        Args: {
+          p_change: number
+          p_note: string
+          p_product_id: string
+          p_reason: string
+        }
+        Returns: undefined
+      }
+      attendant_day: {
+        Args: { p_attendant: string; p_date: string }
+        Returns: Json
+      }
       complete_sale: {
         Args: {
           p_client_ref?: string
@@ -1151,6 +1178,29 @@ export type Database = {
         }
         Returns: Json
       }
+      complete_stock_count: {
+        Args: { p_apply: boolean; p_count_id: string }
+        Returns: Json
+      }
+      confirm_cash_up: {
+        Args: {
+          p_cash_up_id: string
+          p_confirmed_amount: number
+          p_note?: string
+        }
+        Returns: Json
+      }
+      confirm_delivery: {
+        Args: {
+          p_costs: Json
+          p_delivery_id: string
+          p_note?: string
+          p_status: string
+        }
+        Returns: undefined
+      }
+      count_sheet: { Args: { p_count_id: string }; Returns: Json }
+      current_staff_role: { Args: never; Returns: string }
       customer_statement: {
         Args: { p_customer_id: string }
         Returns: {
@@ -1160,31 +1210,24 @@ export type Database = {
           description: string
           happened_at: string
           kind: string
-          reference: string | null
+          reference: string
         }[]
       }
-      confirm_cash_up: {
-        Args: { p_cash_up_id: string; p_confirmed_amount: number; p_note?: string }
+      day_totals: {
+        Args: { p_attendant: string; p_date: string }
         Returns: Json
       }
-      confirm_delivery: {
-        Args: { p_costs: Json; p_delivery_id: string; p_note?: string; p_status: string }
-        Returns: undefined
-      }
-      count_sheet: { Args: { p_count_id: string }; Returns: Json }
-      current_staff_role: { Args: never; Returns: string }
-      is_owner: { Args: never; Returns: boolean }
       debtors: {
         Args: never
         Returns: {
           balance: number
           credit_limit: number
-          days_owed: number | null
+          days_owed: number
           id: string
-          last_payment_at: string | null
+          last_payment_at: string
           name: string
-          oldest_unpaid_at: string | null
-          phone: string | null
+          oldest_unpaid_at: string
+          phone: string
           type: string
         }[]
       }
@@ -1194,6 +1237,7 @@ export type Database = {
       }
       delivery_details: { Args: { p_delivery_id: string }; Returns: Json }
       import_products: { Args: { p_rows: Json }; Returns: Json }
+      is_owner: { Args: never; Returns: boolean }
       is_staff: { Args: never; Returns: boolean }
       list_staff: {
         Args: never
@@ -1209,7 +1253,10 @@ export type Database = {
           role: string
         }[]
       }
-      missing_stock_report: { Args: { p_from: string; p_to: string }; Returns: Json }
+      missing_stock_report: {
+        Args: { p_from: string; p_to: string }
+        Returns: Json
+      }
       my_day: { Args: { p_date?: string }; Returns: Json }
       owner_dashboard: { Args: { p_from: string; p_to: string }; Returns: Json }
       record_credit_payment: {
@@ -1228,16 +1275,29 @@ export type Database = {
           p_items: Json
           p_note?: string
           p_photo_path?: string
-          p_supplier_id?: string
+          p_supplier_id: string
         }
         Returns: Json
       }
-      refund_sale: { Args: { p_reason: string; p_sale_id: string }; Returns: Json }
-      request_approval: { Args: { p_payload: Json; p_type: string }; Returns: string }
+      refund_sale: {
+        Args: { p_reason: string; p_sale_id: string }
+        Returns: Json
+      }
+      request_approval: {
+        Args: { p_payload: Json; p_type: string }
+        Returns: string
+      }
+      reverse_sale: {
+        Args: { p_reason: string; p_sale_id: string; p_status: string }
+        Returns: Json
+      }
       sale_receipt: { Args: { p_sale_id: string }; Returns: Json }
       sales_report: { Args: { p_from: string; p_to: string }; Returns: Json }
       save_product: { Args: { p: Json }; Returns: string }
-      void_sale: { Args: { p_reason: string; p_sale_id: string }; Returns: Json }
+      set_delivery_item_cost: {
+        Args: { p_cost_per_unit: number; p_item_id: string }
+        Returns: undefined
+      }
       start_stock_count: {
         Args: { p_note?: string; p_product_ids?: string[]; p_type: string }
         Returns: string
@@ -1253,12 +1313,20 @@ export type Database = {
         Returns: Json
       }
       submit_count_item: {
-        Args: { p_count_id: string; p_counted_units: number; p_product_id: string }
+        Args: {
+          p_count_id: string
+          p_counted_units: number
+          p_product_id: string
+        }
         Returns: undefined
       }
       update_staff_access: {
         Args: { p_is_active: boolean; p_role: string; p_user_id: string }
         Returns: undefined
+      }
+      void_sale: {
+        Args: { p_reason: string; p_sale_id: string }
+        Returns: Json
       }
     }
     Enums: {
