@@ -1,0 +1,75 @@
+# Nightly database backup to a separate PRIVATE GitHub repository.
+#
+# Needs these repository secrets (Settings > Secrets and variables > Actions):
+#   SUPABASE_DB_URL     Supabase "Session pooler" connection string, with the
+#                       database password filled in
+#   BACKUP_REPO         e.g. rytkeytech/koprice-backups  (must be PRIVATE)
+#   BACKUP_REPO_TOKEN   fine-grained token with "Contents: read and write" on
+#                       the backup repo only
+#
+# The dump contains customer names and phone numbers: never make the backup
+# repo public. See README > Backups for restore steps.
+name: Nightly backup
+
+on:
+  schedule:
+    - cron: "30 0 * * *" # 00:30 UTC = 00:30 in Ghana, every night
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check secrets are set
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          BACKUP_REPO: ${{ secrets.BACKUP_REPO }}
+          BACKUP_REPO_TOKEN: ${{ secrets.BACKUP_REPO_TOKEN }}
+        run: |
+          for name in SUPABASE_DB_URL BACKUP_REPO BACKUP_REPO_TOKEN; do
+            if [ -z "${!name}" ]; then echo "::error::Secret $name is not set"; exit 1; fi
+          done
+
+      - name: Install Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Check out the backup repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ secrets.BACKUP_REPO }}
+          token: ${{ secrets.BACKUP_REPO_TOKEN }}
+          path: backups
+
+      - name: Dump roles, schema and data
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          mkdir -p backups/latest
+          supabase db dump --db-url "$SUPABASE_DB_URL" -f backups/latest/roles.sql --role-only
+          supabase db dump --db-url "$SUPABASE_DB_URL" -f backups/latest/schema.sql
+          supabase db dump --db-url "$SUPABASE_DB_URL" -f backups/latest/data.sql --use-copy --data-only
+          date -u +"%Y-%m-%dT%H:%M:%SZ" > backups/latest/BACKUP_TIME.txt
+          ls -la backups/latest
+
+      - name: Commit the backup
+        working-directory: backups
+        run: |
+          git config user.name "koprice-backup-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add latest
+          if git diff --cached --quiet; then
+            echo "No changes since the last backup."
+          else
+            git commit -m "Backup $(date -u +%Y-%m-%d)"
+            git push
+          fi
