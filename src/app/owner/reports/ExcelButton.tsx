@@ -39,7 +39,7 @@ export function ExcelButton({ dashboard, report, label }: { dashboard: Dashboard
         { item: "Missing stock (counts)", value: dashboard.missing_value },
         { item: "Cash shortages", value: dashboard.shortages },
       ]);
-      add("Daily sales", report.daily.map((d) => ({ date: d.date, retail: d.retail, wholesale: d.wholesale, total: d.retail + d.wholesale, sales: d.count })));
+      add("Daily sales", report.daily.map((d) => ({ date: d.date.slice(0, 10), retail: d.retail, wholesale: d.wholesale, total: d.retail + d.wholesale, sales: d.count })));
       add("Best sellers", report.best_sellers.map((b) => ({ product: b.name, units: b.units, unit: b.base_unit, revenue: b.revenue, cost: b.cost, profit: b.profit })));
       add("Slow movers", report.slow_movers.map((s) => ({ product: s.name, in_stock: s.stock_units, unit: s.base_unit, stock_value: s.stock_value, last_sold: s.last_sold?.slice(0, 10) ?? "never" })));
       add("Staff", report.attendants.map((a) => ({ name: a.name, sales: a.total, count: a.count, days: a.days, discounts: a.discounts, credit: a.credit, refunds_cancelled: a.refunds_voids })));

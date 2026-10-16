@@ -2,6 +2,7 @@ import "server-only";
 
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { connection } from "next/server";
 import type { Database } from "./database.types";
 import { getSupabaseEnv } from "./env";
 
@@ -9,6 +10,9 @@ import { getSupabaseEnv } from "./env";
 // Create a new one per request; never share it between requests.
 export async function createClient() {
   const { url, key } = getSupabaseEnv();
+  // Database pages are always rendered per request (never prerendered), so
+  // the Supabase client may safely read the clock and the session.
+  await connection();
   const cookieStore = await cookies();
 
   return createServerClient<Database>(url, key, {

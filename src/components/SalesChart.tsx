@@ -26,7 +26,9 @@ function compact(n: number) {
 }
 
 /** Daily sales as stacked columns: retail (bottom) and wholesale (top). */
-export function SalesChart({ data }: { data: DailyPoint[] }) {
+export function SalesChart({ data: raw }: { data: DailyPoint[] }) {
+  // The database may send "2026-10-10T00:00:00"; keep just the day.
+  const data = raw.map((d) => ({ ...d, date: d.date.slice(0, 10) }));
   const [active, setActive] = useState<number | null>(null);
   const max = niceMax(Math.max(...data.map((d) => d.retail + d.wholesale), 0));
   const ticks = [0, max / 2, max];
