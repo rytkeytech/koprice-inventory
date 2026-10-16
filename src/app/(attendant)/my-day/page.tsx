@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ChevronRight, HandCoins, MessageSquareWarning } from "lucide-react";
+import { ChevronRight, ClipboardList, HandCoins, MessageSquareWarning } from "lucide-react";
 import { SALE_STATUS } from "@/components/SaleSummary";
 import { formatDate, formatDateTime } from "@/lib/dates";
 import { formatMoney } from "@/lib/money";
@@ -35,7 +35,10 @@ type Day = {
 
 export default async function MyDayPage() {
   const supabase = await createClient();
-  const { data, error } = await supabase.rpc("my_day", {});
+  const [{ data, error }, { data: openCounts }] = await Promise.all([
+    supabase.rpc("my_day", {}),
+    supabase.from("stock_counts").select("id").eq("status", "open"),
+  ]);
   if (error || !data) {
     return <p className="rounded-control bg-danger/10 p-3 text-danger">Could not load your day. Please reload.</p>;
   }
@@ -55,6 +58,12 @@ export default async function MyDayPage() {
         <h1 className="text-2xl font-bold text-brand">My day</h1>
         <p className="text-muted">{formatDate(day.business_date)}</p>
       </div>
+
+      {openCounts && openCounts.length > 0 && (
+        <Link href={openCounts.length === 1 ? `/count/${openCounts[0].id}` : "/count"} className="flex min-h-14 items-center gap-3 rounded-card bg-warning-bg px-4 py-3 font-semibold text-warning">
+          <ClipboardList aria-hidden="true" className="size-5" /> A stock count is open. Tap to help count.
+        </Link>
+      )}
 
       <div className="rounded-card border border-line bg-card p-4">
         <dl className="divide-y divide-line">

@@ -26,3 +26,8 @@ export function formatDateTime(value: string | Date | null | undefined) {
   if (!value) return "—";
   return dateTimeFormatter.format(new Date(value));
 }
+
+/** "YYYY-MM-DD" for today minus `days`, in Ghana time. */
+export function accraDateDaysAgo(days: number) {
+  return new Date(Date.now() - days * 86400000).toLocaleDateString("en-CA", { timeZone: "Africa/Accra" });
+}

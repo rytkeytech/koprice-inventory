@@ -1138,6 +1138,7 @@ export type Database = {
         Returns: undefined
       }
       attendant_day: { Args: { p_attendant: string; p_date: string }; Returns: Json }
+      complete_stock_count: { Args: { p_apply: boolean; p_count_id: string }; Returns: Json }
       complete_sale: {
         Args: {
           p_client_ref?: string
@@ -1170,6 +1171,7 @@ export type Database = {
         Args: { p_costs: Json; p_delivery_id: string; p_note?: string; p_status: string }
         Returns: undefined
       }
+      count_sheet: { Args: { p_count_id: string }; Returns: Json }
       current_staff_role: { Args: never; Returns: string }
       is_owner: { Args: never; Returns: boolean }
       debtors: {
@@ -1207,6 +1209,7 @@ export type Database = {
           role: string
         }[]
       }
+      missing_stock_report: { Args: { p_from: string; p_to: string }; Returns: Json }
       my_day: { Args: { p_date?: string }; Returns: Json }
       record_credit_payment: {
         Args: {
@@ -1233,6 +1236,10 @@ export type Database = {
       sale_receipt: { Args: { p_sale_id: string }; Returns: Json }
       save_product: { Args: { p: Json }; Returns: string }
       void_sale: { Args: { p_reason: string; p_sale_id: string }; Returns: Json }
+      start_stock_count: {
+        Args: { p_note?: string; p_product_ids?: string[]; p_type: string }
+        Returns: string
+      }
       submit_cash_up: {
         Args: {
           p_amount: number
@@ -1242,6 +1249,10 @@ export type Database = {
           p_note?: string
         }
         Returns: Json
+      }
+      submit_count_item: {
+        Args: { p_count_id: string; p_counted_units: number; p_product_id: string }
+        Returns: undefined
       }
       update_staff_access: {
         Args: { p_is_active: boolean; p_role: string; p_user_id: string }
