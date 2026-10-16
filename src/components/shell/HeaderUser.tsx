@@ -16,14 +16,14 @@ export async function HeaderUser({ variant }: { variant: "attendant" | "owner" }
 
   return (
     <div className="flex items-center gap-1">
-      <span className="mr-1 max-w-32 truncate rounded-full bg-success-bg px-3 py-1 text-sm font-semibold text-brand">
+      <span className={`mr-1 max-w-32 truncate rounded-full bg-success-bg px-3 py-1 text-sm font-semibold text-brand ${isOwner ? "hidden sm:inline" : ""}`}>
         {firstName}
       </span>
 
       {/* The owner can also use the selling screens; give a way back and forth. */}
       {isOwner && variant === "owner" && (
-        <Link href="/sell" aria-label="Open selling screens" title="Sell" className={iconButton}>
-          <ShoppingCart aria-hidden="true" className="size-5" />
+        <Link href="/sell" className="mr-1 flex h-11 items-center gap-1.5 rounded-full bg-accent px-3 font-bold text-ink">
+          <ShoppingCart aria-hidden="true" className="size-5" /> Sell
         </Link>
       )}
       {isOwner && variant === "attendant" && (

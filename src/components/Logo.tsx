@@ -1,6 +1,8 @@
 type LogoProps = {
   /** Show the "Koprice / ENTERPRISE" wordmark next to the circle. */
   withWordmark?: boolean;
+  /** Extra classes for the wordmark, e.g. "hidden sm:flex" to hide it on phones. */
+  wordmarkClassName?: string;
   /** Height of the circle mark in pixels. */
   size?: number;
   className?: string;
@@ -42,7 +44,7 @@ export function LogoMark({ size = 40 }: { size?: number }) {
   );
 }
 
-export function Logo({ withWordmark = true, size = 40, className }: LogoProps) {
+export function Logo({ withWordmark = true, size = 40, className, wordmarkClassName }: LogoProps) {
   return (
     <span
       className={`inline-flex items-center gap-2.5 ${className ?? ""}`}
@@ -51,7 +53,7 @@ export function Logo({ withWordmark = true, size = 40, className }: LogoProps) {
     >
       <LogoMark size={size} />
       {withWordmark && (
-        <span className="flex flex-col leading-none" aria-hidden="true">
+        <span className={`flex-col leading-none ${wordmarkClassName ?? "flex"}`} aria-hidden="true">
           <span
             className="font-extrabold text-brand"
             style={{ fontSize: size * 0.55 }}
