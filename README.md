@@ -115,6 +115,7 @@ The owner can also download any period as Excel from **Reports**.
 | `npm run db:types` | Regenerate database types after migrations |
 | `npm run template` | Rebuild the Excel import template |
 | `npm run icons` | Rebuild the app icons |
+| `npm run guide` | Rebuild the user guide PDF (`public/guides/`) from `scripts/guide-content.mjs` |
 
 ## 7. How loss is tracked (summary)
 

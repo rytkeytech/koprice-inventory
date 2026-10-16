@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronRight, ClipboardList, HandCoins, MessageSquareWarning, Receipt } from "lucide-react";
+import { GuideLink } from "@/components/GuideLink";
 import { SALE_STATUS } from "@/components/SaleSummary";
 import { formatDate, formatDateTime } from "@/lib/dates";
 import { formatMoney } from "@/lib/money";
@@ -111,6 +112,8 @@ export default async function MyDayPage() {
           <Receipt aria-hidden="true" className="size-5 text-brand" /> Money spent for the shop
         </Link>
       </div>
+
+      <GuideLink />
 
       <div className="space-y-2">
         <h2 className="text-lg font-bold">My sales today</h2>

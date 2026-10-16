@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { GuideLink } from "@/components/GuideLink";
 import {
   ChevronRight,
   KeyRound,
@@ -66,6 +67,7 @@ export default function SettingsPage() {
           );
         })}
       </ul>
+      <GuideLink />
     </section>
   );
 }

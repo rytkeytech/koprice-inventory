@@ -11,7 +11,8 @@
     "test": "vitest run",
     "icons": "node scripts/generate-icons.mjs",
     "db:types": "supabase gen types typescript --linked --schema public > src/lib/supabase/database.types.ts",
-    "template": "node scripts/generate-template.mjs"
+    "template": "node scripts/generate-template.mjs",
+    "guide": "node scripts/generate-guide.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
@@ -26,12 +27,14 @@
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.5.10",
+    "@fontsource/outfit": "^5.3.0",
     "@tailwindcss/turbopack": "^4",
     "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.4.2",
+    "pdfkit": "^0.20.2",
     "sharp": "^0.35.5",
     "supabase": "^2.121.0",
     "tailwindcss": "^4",
