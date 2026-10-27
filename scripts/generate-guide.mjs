@@ -187,25 +187,27 @@ function callout(kind, text) {
   doc.y = y + boxH + 12;
 }
 
-function table(rows) {
-  const widths = [80, 80, WIDTH - 160];
+/** rows[0] is the header. `first` = widths of the first two columns; the last column takes the rest. */
+function table(rows, first = [80, 80]) {
+  const widths = [first[0], first[1], WIDTH - first[0] - first[1]];
   rows.forEach((row, r) => {
-    doc.font(r === 0 ? "BB" : "B").fontSize(10.5);
-    const h = Math.max(...row.map((cell, c) => doc.heightOfString(cell, { width: widths[c] - 16, lineGap: 2 }))) + 16;
+    // Measure each cell in the font it is drawn in (header and first column are bold).
+    const fontFor = (c) => (r === 0 || c === 0 ? "BB" : "B");
+    const h = Math.max(...row.map((cell, c) => doc.font(fontFor(c)).fontSize(10.5).heightOfString(cell, { width: widths[c] - 16, lineGap: 2 }))) + 16;
     ensure(h);
     const y = doc.y;
     doc.rect(LEFT, y, WIDTH, h).fill(r === 0 ? C.brand : r % 2 ? "#ffffff" : C.bg);
     let x = LEFT;
     row.forEach((cell, c) => {
       doc.fillColor(r === 0 ? "#ffffff" : c === 0 ? C.brand : C.ink)
-        .font(r === 0 || c === 0 ? "BB" : "B")
+        .font(fontFor(c))
         .fontSize(10.5)
         .text(cell, x + 8, y + 8, { width: widths[c] - 16, lineGap: 2 });
       x += widths[c];
     });
     doc.y = y + h;
   });
-  doc.rect(LEFT, doc.y - rows.length, WIDTH, 0).stroke(C.line);
+  doc.moveTo(LEFT, doc.y).lineTo(LEFT + WIDTH, doc.y).lineWidth(0.5).stroke(C.line);
   doc.moveDown(0.8);
 }
 
@@ -233,7 +235,7 @@ sections.forEach((section, i) => {
     else if (block.tip) callout("tip", block.tip);
     else if (block.warn) callout("warn", block.warn);
     else if (block.rule) callout("rule", block.rule);
-    else if (block.table) table(block.table);
+    else if (block.table) table(block.table, block.widths);
   }
 });
 
